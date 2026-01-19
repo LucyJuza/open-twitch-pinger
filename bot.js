@@ -195,7 +195,7 @@ client.on('interactionCreate', async interaction => {
     const userName = interaction.options.get("name").value;
     const user = await twichApiClient.helix.users.getUserByName(userName);
     if (!user) {
-      interaction.reply(`User with login: ${userName} does not exist`);
+      interaction.editReply(`User with login: ${userName} does not exist`);
       return false;
     } else {
       let channeldataobject = datas.find(c => c.chanId == interaction.channelId)
