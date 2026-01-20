@@ -1,6 +1,6 @@
 require('dotenv').config();
 const { Level } = require('level');
-const { Client, GatewayIntentBits, REST, Routes, SlashCommandBuilder, Guild, EmbedBuilder, TextInputStyle, ModalBuilder, ActionRowBuilder, TextInputBuilder, } = require('discord.js');
+const { Client, GatewayIntentBits, REST, Routes, SlashCommandBuilder, Guild, EmbedBuilder, TextInputStyle, ModalBuilder, ActionRowBuilder, TextInputBuilder, MessageFlags, } = require('discord.js');
 const client = new Client({ intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessages, GatewayIntentBits.MessageContent, GatewayIntentBits.DirectMessages] });
 
 const { ApiClient, Stream } = require('twitch');
@@ -82,7 +82,7 @@ const db = new Level('./db', { valueEncoding: 'json' });
   }
 })();
 
-client.on('ready', () => {
+client.on('clientReady', () => {
   console.log(`Logged in as ${client.user.tag}!`);
   setInterval(async () => {
     const toBeChecked = datas.flatMap(chan => chan.streams);
@@ -126,7 +126,7 @@ client.on('interactionCreate', async interaction => {
   }
 
   if (interaction.commandName == "infos") {
-    await interaction.deferReply({ ephemeral: true });
+    await interaction.deferReply({ flags: MessageFlags.Ephemeral });
     const userName = interaction.options.get("name").value;
     const user = await twichApiClient.helix.users.getUserByName(userName);
     if (!user) {
@@ -166,7 +166,7 @@ client.on('interactionCreate', async interaction => {
   }
 
   if (interaction.commandName == "follow") {
-    await interaction.deferReply({ ephemeral: true });
+    await interaction.deferReply({ flags: MessageFlags.Ephemeral });
     const userName = interaction.options.get("name").value;
     const user = await twichApiClient.helix.users.getUserByName(userName);
     if (!user) {
@@ -191,7 +191,7 @@ client.on('interactionCreate', async interaction => {
   }
 
   if (interaction.commandName == "unfollow") {
-    await interaction.deferReply({ ephemeral: true });
+    await interaction.deferReply({ flags: MessageFlags.Ephemeral });
     const userName = interaction.options.get("name").value;
     const user = await twichApiClient.helix.users.getUserByName(userName);
     if (!user) {
